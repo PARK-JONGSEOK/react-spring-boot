@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import EmployeeService from "../services/EmployeeService";
 
-class ListEmployeeComponent extends Component {
+export default class ListEmployeeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       employees: [],
     };
     this.addEmployee = this.addEmployee.bind(this);
+    this.editEmployee = this.editEmployee.bind(this);
+  }
+
+  editEmployee(id) {
+    this.props.history.push(`/update-employee/${id}`);
   }
 
   componentDidMount() {
@@ -45,6 +50,14 @@ class ListEmployeeComponent extends Component {
                   <td>{employee.firstName}</td>
                   <td>{employee.lastName}</td>
                   <td>{employee.emailId}</td>
+                  <td>
+                    <button
+                      onClick={() => this.editEmployee(employee.id)}
+                      className="btn btn-info"
+                    >
+                      Update
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -54,4 +67,3 @@ class ListEmployeeComponent extends Component {
     );
   }
 }
-export default ListEmployeeComponent;
