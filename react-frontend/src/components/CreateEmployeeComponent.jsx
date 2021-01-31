@@ -6,16 +6,32 @@ export default class CreateEmployeeComponent extends Component {
     super(props);
 
     this.state = {
+      id: this.props.match.params.id,
       firstName: "",
       lastName: "",
       emailId: "",
     };
     this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
     this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
-    this.saveEmployee = this.saveEmployee.bind(this);
+    this.saveOrUpdatepeEmployee = this.saveOrUpdatepeEmployee.bind(this);
   }
 
-  saveEmployee = (event) => {
+  componentDidMount() {
+    if (this.state.id === "_add") {
+      return;
+    } else {
+      EmployeeService.getEmployeeById(this.state.id).then((response) => {
+        let employee = response.data;
+        this.setState({
+          firstName: employee.firstName,
+          lastName: employee.lastName,
+          emailId: employee.emailId,
+        });
+      });
+    }
+  }
+
+  saveOrUpdatepeEmployee = (event) => {
     event.preventDefault();
     let employee = {
       firstName: this.state.firstName,
@@ -23,10 +39,15 @@ export default class CreateEmployeeComponent extends Component {
       emailId: this.state.emailId,
     };
     console.log("employee => " + JSON.stringify(employee));
-
-    EmployeeService.createEmployees(employee).then((response) => {
-      this.props.history.push("/employees");
-    });
+    if (this.state.id === "_add") {
+      EmployeeService.createEmployees(employee).then(() => {
+        this.props.history.push("/employees");
+      });
+    } else {
+      EmployeeService.updateEmployees(employee, this.state.id).then(() => {
+        this.props.history.push("/employees");
+      });
+    }
   };
 
   changeFirstNameHandler = (event) => {
@@ -45,13 +66,21 @@ export default class CreateEmployeeComponent extends Component {
     this.props.history.push("/employees");
   }
 
+  getTitle() {
+    if (this.state.id === "_add") {
+      return <h3 className="text-center">Add Employee</h3>;
+    } else {
+      return <h3 className="text-center">Update Employee</h3>;
+    }
+  }
+
   render() {
     return (
       <div>
         <div className="container">
           <div className="row">
             <div className="card col-md-6 offset-md-3 offset-md-3">
-              <h3 className="text-center">Add Employee</h3>
+              {this.getTitle()}
               <div className="card-body">
                 <form action="post">
                   <div className="form-group">
@@ -86,7 +115,7 @@ export default class CreateEmployeeComponent extends Component {
                   </div>
                   <button
                     className="btn btn-success"
-                    onClick={this.saveEmployee}
+                    onClick={this.saveOrUpdatepeEmployee}
                   >
                     Save
                   </button>

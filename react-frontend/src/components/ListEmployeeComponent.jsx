@@ -12,7 +12,7 @@ export default class ListEmployeeComponent extends Component {
   }
 
   editEmployee(id) {
-    this.props.history.push(`/update-employee/${id}`);
+    this.props.history.push(`/add-employee/${id}`);
   }
 
   componentDidMount() {
@@ -22,7 +22,7 @@ export default class ListEmployeeComponent extends Component {
   }
 
   addEmployee() {
-    this.props.history.push("/add-employee");
+    this.props.history.push("/add-employee/_add");
   }
 
   render() {
