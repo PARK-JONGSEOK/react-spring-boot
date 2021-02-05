@@ -16,6 +16,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.amazonaws:aws-java-sdk:1.11.946'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+
 }
 
 test {
