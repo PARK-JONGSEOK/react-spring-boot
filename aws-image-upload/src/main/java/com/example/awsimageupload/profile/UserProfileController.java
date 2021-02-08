@@ -11,6 +11,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/v1/user-profile")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
