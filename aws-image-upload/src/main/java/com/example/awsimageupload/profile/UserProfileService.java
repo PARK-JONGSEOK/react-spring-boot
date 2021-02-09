@@ -1,5 +1,6 @@
 package com.example.awsimageupload.profile;
 
+import com.amazonaws.util.StringUtils;
 import com.example.awsimageupload.bucket.BucketName;
 import com.example.awsimageupload.filestore.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,21 @@ public class UserProfileService {
 
         try {
             fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream());
+            user.changeUserProfileImageLink(fileName);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public byte[] downloadUserProfileImage(UUID userProfileId) {
+        UserProfile user = getUserProfileOrThrow(userProfileId);
+        if (StringUtils.isNullOrEmpty(user.getUserProfileImageLink())) {
+            return new byte[0];
+        }
+        String path = String.format("%s/%s",
+                BucketName.PROFILE_IMAGE.getBucketName(),
+                user.getUserProfileId());
+        return fileStore.download(path, user.getUserProfileImageLink());
     }
 
     private Map<String, String> extractMetadata(MultipartFile file) {

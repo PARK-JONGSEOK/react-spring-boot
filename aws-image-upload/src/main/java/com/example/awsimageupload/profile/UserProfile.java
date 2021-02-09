@@ -10,10 +10,14 @@ import java.util.UUID;
 @Getter
 //@EqualsAndHashCode
 public class UserProfile {
-    private UUID userProfileId;
-    private String username;
+    private final UUID userProfileId;
+    private final String username;
     private String userProfileImageLink; // s3 key
 
+
+    public void changeUserProfileImageLink(String userProfileImageLink) {
+        this.userProfileImageLink = userProfileImageLink;
+    }
 
     @Override
     public boolean equals(Object o) {
